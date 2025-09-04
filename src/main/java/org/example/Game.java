@@ -10,7 +10,8 @@ public class Game {
 
     // player X and Y position
     private int xPos = 0;
-    private int yPos = 0;
+    private int yPos = 2;
+    private int score = 0;
 
     // 2D array to contain the level data
     private int[][] levelGrid;
@@ -68,16 +69,25 @@ public class Game {
 
         for (int x = 0; x < screenWidth; x++)
         {
-            for (int y = 0; y < screenHeight; y++)
+            for (int y = 2; y < screenHeight; y++)
             {
                 levelGrid[x][y] = (int)(Math.random()*10);
             }
         }
     }
 
+    private void setScoreLabel(int score) throws IOException {
+
+        terminal.setCursorPosition(2,1);
+        terminal.putString(String.format("Score: %s", Integer.toString(score)));
+
+        terminal.flush();
+    }
 
     private void drawLevel() throws IOException {
         terminal.clearScreen();
+
+        setScoreLabel(score);
 
         // Draw the map in the terminal window
         terminal.setForegroundColor(TextColor.ANSI.GREEN_BRIGHT);
@@ -114,22 +124,22 @@ public class Game {
         switch(key.getKeyType())
         {
             case ArrowUp:
-                if (levelGrid[xPos][yPos - 1] != 1){
+                if (yPos - 1 <= screenHeight - 1 && yPos - 1 >= 2 && levelGrid[xPos][yPos - 1] != 1){
                     yPos--;
                 }
                 break;
             case ArrowRight:
-                if (levelGrid[xPos + 1][yPos] != 1){
+                if (xPos + 1 <= screenWidth - 1 && xPos + 1 >= 0 && levelGrid[xPos + 1][yPos] != 1){
                     xPos++;
                 }
                 break;
             case ArrowDown:
-                if (levelGrid[xPos][yPos + 1] != 1) {
+                if (yPos + 1 <= screenHeight - 1 && yPos + 1 >= 2 && levelGrid[xPos][yPos + 1] != 1) {
                     yPos++;
                 }
                 break;
             case ArrowLeft:
-                if (levelGrid[xPos - 1][yPos] != 1){
+                if (xPos - 1 <= screenWidth - 1 && xPos - 1 >= 0 && levelGrid[xPos - 1][yPos] != 1){
                     xPos--;
                 }
                 break;
