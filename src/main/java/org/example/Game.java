@@ -24,6 +24,7 @@ public class Game {
     private Terminal terminal;
 
     public Game(Terminal terminal) {
+
         try {
             this.terminal = terminal;
             this.screenWidth = terminal.getTerminalSize().getColumns();
@@ -59,8 +60,8 @@ public class Game {
         }
     }
 
-    private void generateLevel()
-    {
+    private void generateLevel(){
+
         levelGrid = new int[screenWidth][screenHeight];
 
         // A map is created by filling the grid with random numbers between 0 and 9
@@ -76,7 +77,7 @@ public class Game {
         }
     }
 
-    private void setScoreLabel(int score) throws IOException {
+    private void setScoreLabel() throws IOException {
 
         terminal.setCursorPosition(2,1);
         terminal.putString(String.format("Score: %s", Integer.toString(score)));
@@ -84,10 +85,33 @@ public class Game {
         terminal.flush();
     }
 
-    private void drawLevel() throws IOException {
-        terminal.clearScreen();
+    private void cutDownTreeOnPosi(int xPosTree, int yPosTree) throws IOException {
 
-        setScoreLabel(score);
+        terminal.setCursorPosition(xPosTree,yPosTree);
+        terminal.putString(" ");
+
+        score++;
+        setScoreLabel();
+        levelGrid[xPosTree][yPosTree] = 0;
+
+        terminal.flush();
+    }
+
+    private void cutDownTrees() throws IOException {
+
+        for (int x = xPos - 1; x <= xPos + 1; x++){
+            for (int y = yPos - 1; y <= yPos + 1; y++){
+                if (x >= 0 && x < screenWidth && y >= 0 && y < screenHeight && levelGrid[x][y] == 1){
+                    cutDownTreeOnPosi(x, y);
+                }
+            }
+        }
+    }
+
+    private void drawLevel() throws IOException {
+
+        terminal.clearScreen();
+        setScoreLabel();
 
         // Draw the map in the terminal window
         terminal.setForegroundColor(TextColor.ANSI.GREEN_BRIGHT);
@@ -141,6 +165,15 @@ public class Game {
             case ArrowLeft:
                 if (xPos - 1 <= screenWidth - 1 && xPos - 1 >= 0 && levelGrid[xPos - 1][yPos] != 1){
                     xPos--;
+                }
+                break;
+            case Character:
+                char c = key.getCharacter();
+                switch (c) {
+                    case 'e':
+                    case 'E':
+                        cutDownTrees();
+                        break;
                 }
                 break;
         }
