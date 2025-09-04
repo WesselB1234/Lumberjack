@@ -14,7 +14,6 @@ public class Main {
     public static void main(String[] args) {
 
         DefaultTerminalFactory factory = new DefaultTerminalFactory();
-        System.out.println("test");
 
         try (Terminal terminal = factory.createTerminal()) {
 

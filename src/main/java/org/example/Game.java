@@ -27,7 +27,8 @@ public class Game {
             this.terminal = terminal;
             this.screenWidth = terminal.getTerminalSize().getColumns();
             this.screenHeight = terminal.getTerminalSize().getRows();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -89,7 +90,7 @@ public class Game {
                 if (levelGrid[x][y] == 1)
                 {
                     terminal.setCursorPosition(x,y);
-                    terminal.putString("\uD83C\uDF32");
+                    terminal.putString("T");
                 }
             }
         }
@@ -100,12 +101,12 @@ public class Game {
         // Draw the player at the desired position
         terminal.setForegroundColor(TextColor.ANSI.WHITE);
         terminal.setCursorPosition(xPos,yPos);
-        terminal.putString("\uD83D\uDC68");
+        terminal.putString("@");
         terminal.flush();
     }
 
     private void Update(KeyStroke key) throws IOException {
-        // First clear the current position of the player on the screen
+
         terminal.setCursorPosition(xPos,yPos);
         terminal.putString(" ");
 
@@ -113,22 +114,27 @@ public class Game {
         switch(key.getKeyType())
         {
             case ArrowUp:
-                if (levelGrid[xPos][yPos - 1] != 1)
-                yPos--;
+                if (levelGrid[xPos][yPos - 1] != 1){
+                    yPos--;
+                }
                 break;
-
             case ArrowRight:
-                xPos++;
+                if (levelGrid[xPos + 1][yPos] != 1){
+                    xPos++;
+                }
                 break;
-
             case ArrowDown:
-                yPos++;
+                if (levelGrid[xPos][yPos + 1] != 1) {
+                    yPos++;
+                }
                 break;
-
             case ArrowLeft:
-                xPos--;
+                if (levelGrid[xPos - 1][yPos] != 1){
+                    xPos--;
+                }
                 break;
         }
+
         drawCharacter();
     }
 }
