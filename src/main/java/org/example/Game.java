@@ -98,11 +98,12 @@ public class Game {
     }
 
     private void cutDownTrees() throws IOException {
-
+        outerLoop:
         for (int x = xPos - 1; x <= xPos + 1; x++){
             for (int y = yPos - 1; y <= yPos + 1; y++){
                 if (x >= 0 && x < screenWidth && y >= 0 && y < screenHeight && levelGrid[x][y] == 1){
                     cutDownTreeOnPosi(x, y);
+                    break outerLoop;
                 }
             }
         }
